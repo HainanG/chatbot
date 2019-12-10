@@ -6,7 +6,7 @@ from flask import Flask, jsonify, request, abort, send_file
 from dotenv import load_dotenv
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage ,ImageSendMessage
 
 from fsm import TocMachine
 from utils import send_text_message
@@ -16,7 +16,7 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "home","big", "small"],
+    states=["user", "home","big", "small","wow","charge"],
     transitions=[
         {
             "trigger": "advance",
@@ -36,7 +36,19 @@ machine = TocMachine(
             "dest": "small",
             "conditions": "is_going_to_small",
         },
-        {"trigger": "go_back", "source": ["big", "small"], "dest": "home"},
+        {
+            "trigger": "advance",
+            "source": "home",
+            "dest": "wow",
+            "conditions": "is_going_to_wow",
+        },
+        {
+            "trigger": "advance",
+            "source": "home",
+            "dest": "charge",
+            "conditions": "is_going_to_charge",
+        },
+        {"trigger": "go_back", "source": ["big", "small", "wow", "charge"], "dest": "user"},
     ],
     initial="user",
     auto_transitions=False,
@@ -114,7 +126,10 @@ def webhook_handler():
         print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
         if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
+            line_bot_api.reply_message(event.reply_token, ImageSendMessage(
+                original_content_url='https://i.ibb.co/5jG6YpK/EiC3clw.jpg',
+                preview_image_url='https://i.ibb.co/5jG6YpK/EiC3clw.jpg')
+            )
          
     return "OK"
 
