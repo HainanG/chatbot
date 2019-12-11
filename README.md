@@ -71,5 +71,8 @@ Every time `user` state is triggered to `advance` to another state, it will `go_
 				* 搖出豹子 Reply: "666"
 				* 沒有豹子 Reply: "還想玩大的啊"
 		* 沒錢 Reply: "你破產了窮逼 , 如果給本汪罐罐本汪就給你錢錢(輸入罐罐)"
+			* Input: "罐罐"
+				* State: charge
+				* Reply: "好吃，給你錢"
 
 		
