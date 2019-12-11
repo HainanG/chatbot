@@ -23,7 +23,7 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         if money > 0:
             send_text_message(reply_token, "目前財產 : " + str(money) + "\n請選擇押注 大 或 小 或 豹子")
-        elif money < 0:
+        elif money < 1:
             send_text_message(reply_token, "你破產了窮逼\udbc0\udc7d , 如果給本汪罐罐本汪就給你錢錢(輸入罐罐)")
     
     # 罐罐 charge
